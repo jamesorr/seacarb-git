@@ -1,7 +1,7 @@
 # errors()
 # This subroutine does error propagation on the computation of carbonate system variables 
-# from errors (or uncertainties) on six input 
-#  - pair of carbonate system variables 
+# from errors (or uncertainties) on six input
+#  - pair of carbonate system variables
 #  - nutrients (silicate and phosphate concentrations)
 #  - temperature and salinity
 # plus errors on dissociation constants pK0, pK1, pK2, pKb, pKw, pKspa and pKspc
@@ -121,7 +121,7 @@ function(flag, var1, var2, S=35, T=25, Patm=1, P=0, Pt=0, Sit=0,
     # Default value for epK
     if (missing(epK))
     {
-        epK <- c(0.002, 0.01, 0.02, 0.01, 0.01, 0.01, 0.01)
+        epK <- c(0.002, 0.01, 0.02, 0.01, 0.01, 0.02, 0.02)
     }
     else
     {
@@ -261,7 +261,7 @@ function(flag, var1, var2, S=35, T=25, Patm=1, P=0, Pt=0, Sit=0, evar1=0, evar2=
     #     = -(1/ln[10]) * d (ln[H])
     #     = -(1/ln[10]) * (dH / H)
     # Thus dH = - ln[1O] * [H] dpH
-    eH <- - log(10) * H * epH
+    eH <-  log(10) * H * epH   # the formula is del H = -log(10) H epH, but we drop minus sign here (errors are always positive)
     evar1[isH] <- eH
 
     # Same conversion for second variable
@@ -271,7 +271,7 @@ function(flag, var1, var2, S=35, T=25, Patm=1, P=0, Pt=0, Sit=0, evar1=0, evar2=
     epH <- evar2[isH]       # Error on pH
     H  <- 10**(-pH)         # H+ concentration
         
-    eH <- - log(10) * H * epH
+    eH <-  log(10) * H * epH   
     evar2[isH] <- eH
 
     # initialise total square error
@@ -283,7 +283,7 @@ function(flag, var1, var2, S=35, T=25, Patm=1, P=0, Pt=0, Sit=0, evar1=0, evar2=
     {
         # Compute sensitivities (partial derivatives)
         deriv1 <- derivnum ('1', flag, var1, var2, S=S, T=T, Patm=Patm, P=P, Pt=Pt, Sit=Sit, k1k2=k1k2, kf=kf, ks=ks, 
-            pHscale=pHscale, b=b, gas=gas, warn=warn)
+                            pHscale=pHscale, b=b, gas=gas, warn=warn)
         err <- deriv1 * evar1
         sq_err <- sq_err + err * err
     }
@@ -293,7 +293,7 @@ function(flag, var1, var2, S=35, T=25, Patm=1, P=0, Pt=0, Sit=0, evar1=0, evar2=
     {
         # Compute sensitivities (partial derivatives)
         deriv2 <- derivnum ('2', flag, var1, var2, S=S, T=T, Patm=Patm, P=P, Pt=Pt, Sit=Sit, k1k2=k1k2, kf=kf, ks=ks, 
-            pHscale=pHscale, b=b, gas=gas, warn=warn)
+                            pHscale=pHscale, b=b, gas=gas, warn=warn)
         err <- deriv2 * evar2
         sq_err <- sq_err + err * err
     }
@@ -305,47 +305,27 @@ function(flag, var1, var2, S=35, T=25, Patm=1, P=0, Pt=0, Sit=0, evar1=0, evar2=
         covariance <- r * evar1 * evar2
         # Contribution to squared error
         err2 <- 2 * deriv1 * deriv2 * covariance
-        sq_err <- sq_err + err2
+        sq_err <- sq_err + err1
     }
 
     # Contribution of Silion (total dissolved inorganic concentration) to squared standard error
-    #
-    # Remark : does not compute error where Sit = 0 
-    #          because computation of sensitivity to Sit fails in that case
-    #
-    Sit_valid <- Sit != 0
-    if (any (Sit_valid))
+    if (any (eSit != 0.0))
     {
-        if (any (eSit[Sit_valid] != 0.0))
-        {
-            # Compute sensitivities (partial derivatives)
-            deriv <- derivnum ('sil', flag[Sit_valid], var1[Sit_valid], var2[Sit_valid], S=S[Sit_valid], T=T[Sit_valid],
-                               Patm=Patm[Sit_valid], P=P[Sit_valid], Pt=Pt[Sit_valid], Sit=Sit[Sit_valid], 
-                               k1k2=k1k2[Sit_valid], kf=kf[Sit_valid], ks=ks[Sit_valid], 
-                               pHscale=pHscale[Sit_valid], b=b[Sit_valid], gas=gas, warn=warn)
-            err <- deriv * eSit[Sit_valid]
-            sq_err[Sit_valid] <- sq_err[Sit_valid] + err * err
-        }
+        # Compute sensitivities (partial derivatives)
+        deriv <- derivnum ('sil', flag, var1, var2, S=S, T=T, Patm=Patm, P=P, Pt=Pt, Sit=Sit, k1k2=k1k2, kf=kf, ks=ks, 
+                           pHscale=pHscale, b=b, gas=gas, warn=warn)
+        err <- deriv * eSit
+        sq_err <- sq_err + err * err
     }
 
     # Contribution of Phosphorus (total dissolved inorganic concentration) to squared standard error
-    #
-    # Remark : does not compute error where Pt = 0 
-    #          because computation of sensitivity to Pt fails in that case
-    #
-    Pt_valid <- Pt != 0
-    if (any (Pt_valid))
+    if (any (ePt != 0.0))
     {
-        if (any (ePt[Pt_valid] != 0.0))
-        {
-            # Compute sensitivities (partial derivatives)
-            deriv <- derivnum ('phos', flag[Pt_valid], var1[Pt_valid], var2[Pt_valid], S=S[Pt_valid], T=T[Pt_valid],
-                               Patm=Patm[Pt_valid], P=P[Pt_valid], Pt=Pt[Pt_valid], Sit=Sit[Pt_valid], 
-                               k1k2=k1k2[Pt_valid], kf=kf[Pt_valid], ks=ks[Pt_valid], 
-                               pHscale=pHscale[Pt_valid], b=b[Pt_valid], gas=gas, warn=warn)
-            err <- deriv * ePt[Pt_valid]
-            sq_err[Pt_valid] <- sq_err[Pt_valid] + err * err
-        }
+        # Compute sensitivities (partial derivatives)
+        deriv <- derivnum ('phos', flag, var1, var2, S=S, T=T, Patm=Patm, P=P, Pt=Pt, Sit=Sit, k1k2=k1k2, kf=kf, ks=ks, 
+                           pHscale=pHscale, b=b, gas=gas, warn=warn)
+        err <- deriv * ePt
+        sq_err <- sq_err + err * err
     }
 
     # Contribution of T (temperature) to squared standard error
@@ -353,7 +333,7 @@ function(flag, var1, var2, S=35, T=25, Patm=1, P=0, Pt=0, Sit=0, evar1=0, evar2=
     {
         # Compute sensitivities (partial derivatives)
         deriv <- derivnum ('T', flag, var1, var2, S=S, T=T, Patm=Patm, P=P, Pt=Pt, Sit=Sit, k1k2=k1k2, kf=kf, ks=ks, 
-            pHscale=pHscale, b=b, gas=gas, warn=warn)
+                           pHscale=pHscale, b=b, gas=gas, warn=warn)
         err <- deriv * eT
         sq_err <- sq_err + err * err
     }
@@ -363,7 +343,7 @@ function(flag, var1, var2, S=35, T=25, Patm=1, P=0, Pt=0, Sit=0, evar1=0, evar2=
     {
         # Compute sensitivities (partial derivatives)
         deriv <- derivnum ('S', flag, var1, var2, S=S, T=T, Patm=Patm, P=P, Pt=Pt, Sit=Sit, k1k2=k1k2, kf=kf, ks=ks, 
-            pHscale=pHscale, b=b, gas=gas, warn=warn)
+                           pHscale=pHscale, b=b, gas=gas, warn=warn)
         err <- deriv * eS
         sq_err <- sq_err + err * err
     }
