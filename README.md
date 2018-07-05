@@ -1,9 +1,10 @@
-Test it with binder.
-[![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/jamesorr/seacarb-git/master?filepath=notebooks)
 seacarb
 =======
 
 Carbonate chemistry with R
+
+[![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/jamesorr/seacarb-git/master?filepath=notebooks%2FIRkernel)
+Launch interactive examples in your brower (with binder via the Cloud)
 
 In 2003, Aurélien Proye and I put together seacarb, an R package that calculates various parameters of the carbonate system in seawater. The package was subsequently upgraded. In 2008, a new version (2.0) was built with the assistance of Héloïse Lavigne. Five additional functions were included to assist the design of perturbation experiments to investigate ocean acidification and other functions were revised in order to strictly follow the "Guide to best practices for ocean CO2 measurements" (Dickson et al., 2007). Seacarb uses equations mostly from the following four sources:
 
