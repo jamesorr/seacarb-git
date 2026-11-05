@@ -222,11 +222,21 @@ buffesm <-
    #   aphscale = 1 + ST/Ks ;  api1_flu = Kf_free*aphscale ;  A_HF = -FT*h/(api1_flu+h)
    # so w = -dAlk/dh must include +FT*Kfa/(Kfa+h)^2.  Kf MUST be put on the same pH
    # scale as h (a 28% factor); using the free-scale Kf with a total-scale h is wrong.
-   aph <- 1 + ST/Ks                 # SolveSAPHE aphscale (total pH scale)
-   Kfa <- Kff*aph                   # Kf on the chosen (total) pH scale
-   SegleF <- h * FT*Kfa/(Kfa + h)^2   # = h*wF, matching Segle = h*w
+   # --- fluoride and sulfate: which terms are separate members of the alkalinity -----
+   # This depends on the pH scale of h (SolveSAPHE: aphscale = 1 (F), 1 + ST/Ks (T),
+   # 1 + ST/Ks + FT/Kf (SWS)):
+   #   free  (F):  ALK = ... - [H+]F - [HSO4-] - [HF]   -> sulfate AND fluoride terms
+   #   total (T):  ALK = ... - [H+]T - [HF]             -> fluoride term only
+   #   SWS:        ALK = ... - [H+]SWS                  -> neither (both are inside [H+]SWS)
+   # Kf is put on the scale of h: aphscale on T, free-scale value on F.
+   aph       <- 1 + (ST/Ks)*(pHscale == "T")    # = 1 + ST/Ks on T (as before), 1 on F
+   Kfa       <- Kff*aph                         # Kf on the chosen (T or F) pH scale
+   expl.HF   <- (pHscale %in% c("T", "F"))
+   expl.HSO4 <- (pHscale == "F")
+   SegleF    <- h * expl.HF*FT*Kfa/(Kfa + h)^2         # = h*wF, matching Segle = h*w
+   SegleSO4  <- h * expl.HSO4*ST*Ks/(Ks + h)^2         # = h*wSO4
 
-   Segle <- SegleC + SegleP + SegleSi + SegleN + SegleS + SegleF
+   Segle <- SegleC + SegleP + SegleSi + SegleN + SegleS + SegleF + SegleSO4
 
    # GOOD formula from Sabine (Excel sheet, 23 Aug 2010)
    Pegle  = (2*CO2 + HCO3)                                  
