@@ -141,15 +141,17 @@ The arguments can be given as a unique number or as vectors. If the lengths of t
   \item{dtotX.dX}{Sensitivity of an acid-base species to a change in its total concentration (dimensionless). Species-specific.}
   \item{dALK.dpH}{Sensitivity of ALK to a change in pH (mol/kg-soln). Species-specific.}
   \item{dtotX.dpH}{Sensitivity of an acid-species to a change in pH (mol/kg-soln). Species-specific.}
-  \item{dH.dALK}{Sensitivity of proton concentration to a change in ALK (dimensionless). Values are the same for all species and all acid-base systems, except for the fluoride and sulfate acid-base systems, which slightly deviate due to pH scale conversion effects.}
+  \item{dH.dALK}{Sensitivity of proton concentration to a change in ALK (dimensionless). Values are the same for all species and all acid-base systems for which they are defined (see below for the fluoride and sulfate systems).}
   \item{dH.dtotX}{Sensitivity of an acid-species to a change in its total concentration (dimensionless). Values are the same for all species of a specific acid-base system.}
   \item{dX.dALK}{Sensitivity of an acid-species to a change in its total concentration (dimensionless). Species-specific.}
   \item{dX.dtotX}{Sensitivity of an acid-species to a change in its total concentration (dimensionless). Species-specific.}
-  \item{dpH.dALK}{Sensitivity of pH due to a change in ALK ((mol/kg-soln)-1). Values are the same for all species and all acid-base systems, except for the fluoride and sulfate acid-base systems, which slightly deviate due to pH scale conversion effects.}
+  \item{dpH.dALK}{Sensitivity of pH due to a change in ALK ((mol/kg-soln)-1). Values are the same for all species and all acid-base systems for which they are defined (see below for the fluoride and sulfate systems).}
   \item{dpH.dtotX}{Sensitivity of pH due to a change in the total concentration of an acid-base system ((mol/kg-soln)-1). Values are the same for all species of a specific acid-base system.}
   \item{beta.H}{proton concentration buffer factor (Eq.4 of Hagens and Middelburg (2016), dimensionless)}   
   \item{RF}{Revelle factor (dimensionless)}
   If the total concentration of an acid-base system is 0, the values of the buffer factors corresponding to all species of that acid-base system return NA.
+
+  The same is done where the derivative with respect to an acid-base system is not defined on the chosen pH scale. The sulfate system (SO4, HSO4, ST) is a separate member of the total alkalinity only on the free scale, because on the total and seawater scales HSO4 is part of the definition of [H+]. The fluoride system (F, HF, FLUO) is a separate member on the free and total scales but not on the seawater scale, where HF is also part of [H+]. For those systems and scales all twelve species-specific outputs are NA, because changing the total concentration of such a system would also change the definition of the pH scale. The Revelle factor (RF) and beta.H are not affected.
 }
 
 \references{

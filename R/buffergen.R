@@ -137,7 +137,10 @@ buffergen <- function(flag, var1, var2, S=35, T=25, Patm=1, P=0, Pt=0, Sit=0, k1
                 if(X.name == "CO3" || X.name == "PO4" || X.name == "SiO2OH2") {N <- 2} else
                      
                      if(X.name == "H3PO4" || X.name == "HF" || X.name == "HSO4") {
-                       n <- -1} else
+                       # N (capital) is the value returned by this function. The former
+                       # lowercase 'n <- -1' only worked because an assignment also
+                       # returns its value; it never set N itself.
+                       N <- -1} else
                          
                          NULL
     }
@@ -187,10 +190,13 @@ buffergen <- function(flag, var1, var2, S=35, T=25, Patm=1, P=0, Pt=0, Sit=0, k1
           dALKdH.F <- (-1/H)*(-N*ALK.X + HF)} else {
             dALKdH.F <- if(explicit.HF) (-1/H)*(HF*f2) else 0}
             # d(-[HF])/dH at fixed total fluoride equals +[HF][F-]/(TotF [H+]) = (1/H)*HF*f2.
-            # In Table 2b of Hagens and Middelburg (2016) the fluoride row is printed
-            # as (-1/[H+])(-[HF][F-]/TotF), i.e. with the opposite sign. The former
-            # code (-1/H)*(-HF*f2) copied that sign. Corrected here, and used only
-            # where HF is an explicit alkalinity term (explicit.HF).
+            # In Table 2, column (b), of Hagens and Middelburg (2016) the fluoride row is
+            # printed as (-1/[H+])(-[HF][F-]/TotF), which has the opposite sign. The nitrate
+            # and nitrite rows have the same printed form and the same sign problem, but
+            # those systems are not included in buffergen(). Column (a) and the other rows
+            # of column (b) are correct. The former code here, (-1/H)*(-HF*f2), copied the
+            # printed fluoride sign. Corrected here, and used only where HF is an explicit
+            # alkalinity term (explicit.HF).
       } else dALKdH.F <- 0  
       if(ST!=0) {
         if(X.name == "SO4" || X.name == "HSO4" || X.name == "ST") {
@@ -287,7 +293,25 @@ buffergen <- function(flag, var1, var2, S=35, T=25, Patm=1, P=0, Pt=0, Sit=0, k1
       ALK.X          <- ALK.species(X.name)
       totX           <- totX.function(X.name)
       
-      if(totX!=0) {
+      # Is the derivative with respect to this species or its total defined on the
+      # chosen pH scale? The sulfate system (SO4, HSO4, ST) is a separate member of the
+      # alkalinity sum only on the free scale, because on the total and SWS scales the
+      # bisulfate is part of the definition of [H+]. In the same way, the fluoride
+      # system (F, HF, FLUO) is a separate member on the free and total scales but not
+      # on the SWS scale, where HF is also part of [H+]. Where the system is not a
+      # separate member, "the derivative with respect to its total" has no meaning:
+      # changing total sulfate (or fluoride) would also change the definition of the pH
+      # scale itself. Before this masking, ALK.X was set to -[HSO4-] or -[HF] on every
+      # scale, so these rows returned numbers that looked plausible but were wrong
+      # (relative errors from 1e-6 up to order one, depending on the quantity).
+      # They are now left as NA, as for a system with zero total concentration.
+      # The Revelle factor (RF) and beta.H do not depend on these rows.
+      in.sulfate.system  <- X.name %in% c("SO4", "HSO4", "ST")
+      in.fluoride.system <- X.name %in% c("F", "HF", "FLUO")
+      is.defined <- !((in.sulfate.system  && !explicit.HSO4) ||
+                      (in.fluoride.system && !explicit.HF))
+      
+      if(totX!=0 && is.defined) {
       # Calculation of factors in Table 3a
       dALK.dH[i]     <- dALKdH.function(X.name)
       dtotX.dH[i]    <- (N*totX - ALK.X) / H
