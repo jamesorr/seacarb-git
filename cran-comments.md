@@ -15,6 +15,9 @@ both Kf formulations are on the free scale. Regression tests were added
 ## Test environments
 
 * local Ubuntu 24.04.5, R 4.3.3, with NOT_CRAN=true and --as-cran
+* GitHub Actions: ubuntu-latest (release, devel) and windows-latest
+  (release), all passing. The macos-latest job could not be run
+  because no runner became available.
 
 ## R CMD check results
 
