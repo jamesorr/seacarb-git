@@ -21,16 +21,14 @@ both Kf formulations are on the free scale. Regression tests were added
 
 ## R CMD check results
 
-0 errors | 0 warnings | 3 notes
+0 errors | 0 warnings | 2 notes
 
-* CRAN incoming feasibility: maintainer note. The URL
-  https://systemco2.net/t/27 (used in the Kf and related help pages)
-  redirects to the full thread address and returns status 200. The short
-  form is kept because the full address contains the thread title.
 * checking for future file timestamps: unable to verify current time
   (the local machine could not check the time).
 * checking HTML version of manual: math rendering skipped because
   package V8 is unavailable locally.
+
+Both notes come from the local environment and not from the package.
 
 ## Reverse dependencies
 
