@@ -209,7 +209,7 @@ Uppstrom L.R., 1974 The boron/chlorinity ratio of the deep-sea water from the Pa
 
 Zeebe R. E. and Wolf-Gladrow D. A., 2001 CO2 in seawater: equilibrium, kinetics, isotopes. \emph{Elsevier Oceanography Series} \bold{65}, Amsterdam, 346 pp.
 
-SystemCO2 discussion forum, 2026 What pH scale is the Perez and Fraga (1987) KF on? seacarb and PyCO2SYS disagree, and the coefficients make it puzzling. \url{https://systemco2.net/t/27} (last access: 6 November 2026).
+SystemCO2 discussion forum, 2026 What pH scale is the Perez and Fraga (1987) KF on? seacarb and PyCO2SYS disagree, and the coefficients make it puzzling. \url{https://systemco2.net/t/what-ph-scale-is-the-perez-fraga-1987-k-f-on-seacarb-and-pyco2sys-disagree-and-the-coefficients-make-it-puzzling/27} (last access: 6 November 2026).
 }
 
 \author{

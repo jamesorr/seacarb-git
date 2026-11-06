@@ -152,7 +152,7 @@ Millero F. J., Graham T. B., Huang F., Bustos-Serrano H. and Pierrot D., 2006 Di
 
 Waters, J., Millero, F. J., and Woosley, R. J., 2014. Corrigendum to ``The free proton concentration scale for seawater pH'', [MARCHE: 149 (2013) 8-22], Marine Chemistry 165, 66-67.
 
-SystemCO2 discussion forum, 2026 What pH scale is the Perez and Fraga (1987) KF on? seacarb and PyCO2SYS disagree, and the coefficients make it puzzling. \url{https://systemco2.net/t/27} (last access: 6 November 2026).
+SystemCO2 discussion forum, 2026 What pH scale is the Perez and Fraga (1987) KF on? seacarb and PyCO2SYS disagree, and the coefficients make it puzzling. \url{https://systemco2.net/t/what-ph-scale-is-the-perez-fraga-1987-k-f-on-seacarb-and-pyco2sys-disagree-and-the-coefficients-make-it-puzzling/27} (last access: 6 November 2026).
 }
 
 \author{

@@ -242,7 +242,7 @@ Weiss, R. F. and Price, B. A., 1980. Nitrous oxide solubility in water and seawa
 Zeebe R. E. and Wolf-Gladrow D. A., 2001 \emph{CO2 in seawater: equilibrium, kinetics, isotopes}. Amsterdam: Elsevier, 346 pp.
 
 
-SystemCO2 discussion forum, 2026 What pH scale is the Perez and Fraga (1987) KF on? seacarb and PyCO2SYS disagree, and the coefficients make it puzzling. \url{https://systemco2.net/t/27} (last access: 6 November 2026).
+SystemCO2 discussion forum, 2026 What pH scale is the Perez and Fraga (1987) KF on? seacarb and PyCO2SYS disagree, and the coefficients make it puzzling. \url{https://systemco2.net/t/what-ph-scale-is-the-perez-fraga-1987-k-f-on-seacarb-and-pyco2sys-disagree-and-the-coefficients-make-it-puzzling/27} (last access: 6 November 2026).
 }
 \author{
  Kimberlee Baldry, Lennart Bach and Jean-Pierre Gattuso, 

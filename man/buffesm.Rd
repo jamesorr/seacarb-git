@@ -184,7 +184,7 @@ Schockman, K.M., Byrne, R.H., 2021. Spectrophotometric determination of the bica
 
 Uppstrom L.R., 1974 The boron/chlorinity ratio of the deep-sea water from the Pacific Ocean. \emph{Deep-Sea Research I} \bold{21} 161-162.
 
-SystemCO2 discussion forum, 2026 What pH scale is the Perez and Fraga (1987) KF on? seacarb and PyCO2SYS disagree, and the coefficients make it puzzling. \url{https://systemco2.net/t/27} (last access: 6 November 2026).
+SystemCO2 discussion forum, 2026 What pH scale is the Perez and Fraga (1987) KF on? seacarb and PyCO2SYS disagree, and the coefficients make it puzzling. \url{https://systemco2.net/t/what-ph-scale-is-the-perez-fraga-1987-k-f-on-seacarb-and-pyco2sys-disagree-and-the-coefficients-make-it-puzzling/27} (last access: 6 November 2026).
 }
 
 \author{

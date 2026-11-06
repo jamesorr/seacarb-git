@@ -159,7 +159,7 @@ Plummer L. N. and Mackenzie F. T., 1974. Predicting mineral solubility from rate
 
 Thorstenson D.C. and Plummer L.N., 1977. Equilibrium criteria for two component solids reacting with fixed composition in an aqueous phase-example: the magnesian calcites. \emph{American Journal of Science} \bold{277}, 1203-1233.
 
-SystemCO2 discussion forum, 2026 What pH scale is the Perez and Fraga (1987) KF on? seacarb and PyCO2SYS disagree, and the coefficients make it puzzling. \url{https://systemco2.net/t/27} (last access: 6 November 2026).
+SystemCO2 discussion forum, 2026 What pH scale is the Perez and Fraga (1987) KF on? seacarb and PyCO2SYS disagree, and the coefficients make it puzzling. \url{https://systemco2.net/t/what-ph-scale-is-the-perez-fraga-1987-k-f-on-seacarb-and-pyco2sys-disagree-and-the-coefficients-make-it-puzzling/27} (last access: 6 November 2026).
 }
 
 \author{
