@@ -130,7 +130,7 @@ The arguments can be given as a unique number or as vectors. If the lengths of t
 
 \item For K1, K2, pK1, pK2, pK3, Kw, Kb, Khs and Ksi, the pressure correction was applied on the seawater scale. Hence, if needed, values were first transformed from the total scale to the seawater scale, the pressure correction applied as described by Millero (1995), and the value was transformed back to the required scale (T, F or SWS).
 
-\item For Kf, the pressure correction was applied on the free scale. The formulation of Dickson and Riley (1979 in Dickson and Goyet, 1994) provides Kf on the free scale but that of Perez and Fraga (1987) provides it on the total scale. Hence, in that case, Kf was first transformed from the total scale to the free scale. With both formulations, the pressure correction was applied as described by Millero (1995), and the value was transformed back to the required scale (T, F or SWS). 
+\item For Kf, the pressure correction was applied on the free scale. Both formulations, that of Dickson and Riley (1979 in Dickson and Goyet, 1994) and that of Perez and Fraga (1987), provide Kf on the free scale (SystemCO2 discussion forum, 2026). This holds even though Dickson et al. (2007, Chapter 5) state that all acid dissociation constants other than Ks are on the total scale. That statement does not apply to Kf, which is on the free scale. So no conversion is needed before the pressure correction, which is applied as described by Millero (1995), and the value is then transformed to the required scale (T, F or SWS). 
 
 \item For Ks, the pressure correction was applied on the free scale. The pressure correction was applied as described by Millero (1995), and the value was transformed back to the required scale (T, F or SWS). 
 
@@ -158,6 +158,8 @@ Morse J. W., Andersson A. J. and Mackenzie F. T., 2006. Initial responses of car
 Plummer L. N. and Mackenzie F. T., 1974. Predicting mineral solubility from rate data: application to the dissolution of magnesian calcites. \emph{American Journal of Science} \bold{274}:61-83.
 
 Thorstenson D.C. and Plummer L.N., 1977. Equilibrium criteria for two component solids reacting with fixed composition in an aqueous phase-example: the magnesian calcites. \emph{American Journal of Science} \bold{277}, 1203-1233.
+
+SystemCO2 discussion forum, 2026 What pH scale is the Perez and Fraga (1987) KF on? seacarb and PyCO2SYS disagree, and the coefficients make it puzzling. \url{https://systemco2.net/t/27} (last access: 6 November 2026).
 }
 
 \author{
