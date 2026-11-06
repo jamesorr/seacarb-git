@@ -146,8 +146,8 @@ buffderiv <- function(flag, var1, var2, S=35, T=25, Patm=1, Pt=0, Sit=0,
     # K2si is all that is needed to switch.
     if (use_carbfull) {
         K2si <- as.numeric(K2si(S=S, T=T, P=0, pHscale=pHscale, kSWS2chosen, ktotal2SWS_P0))
-        Kn   <- as.numeric(Kn (S=S, T=T, P=0, pHscale=pHscale, warn=warn))
-        Khs  <- as.numeric(Khs(S=S, T=T, P=0, pHscale=pHscale, warn=warn))
+        Kn   <- as.numeric(Kn (S=S, T=T, P=0, pHscale=pHscale, kSWS2chosen, warn=warn))
+        Khs  <- as.numeric(Khs(S=S, T=T, P=0, pHscale=pHscale, kSWS2chosen, ktotal2SWS_P0, warn=warn))
     } else {
         K2si <- rep(0, n) ; Kn <- rep(1, n) ; Khs <- rep(1, n)   # inert; NH4t=HSt=0
     }
@@ -187,9 +187,9 @@ buffderiv <- function(flag, var1, var2, S=35, T=25, Patm=1, Pt=0, Sit=0,
 
     dK2si_dT <- K2si*L$K2si_T ; dK2si_dS <- K2si*L$K2si_S     # total-scale native
     dKhs_dT  <- Khs *L$Khs_T  ; dKhs_dS  <- Khs *L$Khs_S      # total-scale native
-    # Kn is SWS native, but seacarb converts it with kf="x" (see dlnK.R), NOT with our
-    # kf="dg". We must use the SAME factor seacarb used, or dKn/dY is wrong by up to 8%.
-    dKn_dT   <- Kn*(L$Kn_T + L$Sigx_T) ; dKn_dS <- Kn*(L$Kn_S + L$Sigx_S)
+    # Kn is SWS native, so dKn/dY needs dln(Sig)/dY. Kn() is given the same kSWS2chosen
+    # (kf="dg") as every other constant (seacarb 3.4.2), so the same Sig_T and Sig_S apply.
+    dKn_dT   <- Kn*(L$Kn_T + L$Sig_T) ; dKn_dS <- Kn*(L$Kn_S + L$Sig_S)
 
     dKs_dT <- Ksv*L$Ks_T ; dKs_dS <- Ksv*L$Ks_S               # free scale
     dKf_dT <- Kfv*L$Kf_T ; dKf_dS <- Kfv*L$Kf_S               # free scale

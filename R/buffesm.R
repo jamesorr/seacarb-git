@@ -135,8 +135,8 @@ buffesm <-
     # all that is needed. Without this, wSi is differentiating an alkalinity that
     # carb() does not use (error ~6e-8 of AT at Sit = 60 umol/kg).
     if (!use_carbfull) K2si <- 0*K2si
-   Kn  <- Kn(S=SP, T=InsT, P=P, pHscale=pHscale, warn=warn)
-   Khs <- Khs(S=SP, T=InsT, P=P, pHscale=pHscale, warn=warn)
+   Kn  <- Kn(S=SP, T=InsT, P=P, pHscale=pHscale, kSWS2chosen, warn=warn)
+   Khs <- Khs(S=SP, T=InsT, P=P, pHscale=pHscale, kSWS2chosen, ktotal2SWS_P0, warn=warn)
    #Kspa <- Kspa(S=SP, T=InsT, P=P, warn=warn)
    #Kspc <- Kspc(S=SP, T=InsT, P=P, warn=warn)
 
