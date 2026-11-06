@@ -1,7 +1,8 @@
-version 3.4.2 2026-11-05
+version 3.4.2 2026-11-06
 -----------------------------------
 - Fix: buffergen() had reversed signs in the derivative terms of the fluoride and sulfate systems, and counted sulfate twice on the total pH scale. The Revelle factor RF was too high or too low by 5 to 20 ppm. RF and the other outputs now agree with buffsun(), buffzwg(), buffesm(), and buffer() on the total scale. Outputs that are not defined on a pH scale (derivatives with respect to sulfate on the total and seawater scales, and with respect to fluoride on the seawater scale, where these systems are part of the definition of the hydrogen ion concentration) are now NA. Added regression tests (test-buffergen.R) and a before and after script (notebooks/buffergen_before_after.R).
 - Fix: buffsun(), buffzwg(), buffesm(), and buffer() always evaluated the fluoride and sulfate terms of the noncarbonate alkalinity for the total pH scale. On the free and seawater scales, Rf was off by up to about 13 ppm. The terms now follow the alkalinity definition of the chosen scale. Results on the total scale (the default) are unchanged. Added test-buff-scales.R.
+- Update: the help pages of 21 functions (Kf, Om, SIR, SIR_b, SIR_full, buffer, buffergen, buffesm, buffsun, buffzwg, carb, carbb, carbfull, oa, pCa, pHinsi, pTA, pgas, pmix, ppH, psi) said that Kf from Perez and Fraga (1987) is on the total scale and was converted to the free scale. Both that formulation and the one of Dickson and Riley (1979) provide Kf on the free scale, so no conversion is needed before the pressure correction. The text now says this and cites the SystemCO2 discussion forum thread (https://systemco2.net/t/27). The code was already correct since 3.4.1.
 
 version 3.4.1 2026-07-30
 -----------------------------------
