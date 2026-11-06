@@ -64,19 +64,12 @@ dlnK <- function(S, T, Ks, Kf) {
     Sig_T <- dU_dT/U - dV_dT/V
     Sig_S <- dU_dS/U - dV_dS/V
 
-    ## --- Sig_x: the SWS->total factor that seacarb's Kn() ACTUALLY uses -------
-    # Kn() and Khs() do NOT accept a kSWS2scale argument (unlike Kw, Ksi, K1p...),
-    # so they call kconv() with its default kf="x".  Kf.R then does
-    #     is_outrange <- T>33 | T<10 | S<10 | S>40
-    #     kf[is_x] <- "pf" ; kf[is_x & is_outrange] <- "dg"
-    # i.e. Perez & Fraga IN range, Dickson & Riley outside.  Khs is total-scale
-    # native so the factor round-trips and cancels, but Kn is SWS native and does
-    # NOT cancel.  To differentiate seacarb's Kn() we must follow the active branch.
-    #
-    # WARNING: this makes dKn/dT and dKn/dS DISCONTINUOUS across T=10, T=33, S=10,
-    # S=40.  Whenever NH4t != 0, dBe/dT and dBe/dS inherit that discontinuity.  It is
-    # a seacarb API defect, not a property of the chemistry.  The clean fix upstream
-    # is to give Kn() and Khs() a kSWS2scale argument like the other constants have.
+    ## --- Sig_x: kept for reference only --------------------------------------
+    # Until seacarb 3.4.1, Kn() and Khs() were called without a kSWS2scale argument and
+    # fell back to kconv() with kf="x" (Perez and Fraga in range, Dickson and Riley
+    # outside), so dKn/dT and dKn/dS were discontinuous across T=10, T=33, S=10, S=40 and
+    # needed Sig_x below. buffderiv() now passes kSWS2chosen to Kn() and Khs(), like every
+    # other constant, and uses Sig_T and Sig_S. Sig_x is no longer used by buffderiv().
     in_pf <- !(T > 33 | T < 10 | S < 10 | S > 40)
     daph_dT <- -(ST/Ks)*Ks_T
     daph_dS <- dST_dS/Ks - (ST/Ks)*Ks_S

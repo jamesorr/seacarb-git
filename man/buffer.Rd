@@ -66,7 +66,7 @@ flag = 25     pCO2 and DIC given
   \item{k1k2}{"cw" for using K1 and K2 from Cai & Wang (1998), "l" from Lueker et al. (2000), "m02" from Millero et al. (2002), "m06" from Millero et al. (2006), "m10" from Millero (2010), "mp2" from Mojica Prieto et al. (2002), "p18" from Papadimitriou et al. (2018), "r" from Roy et al. (1993), "sb21" from Shockman & Byrne (2021), "s20" from Sulpis et al. (2020), and "w14" from Waters et al. (2014). "x" is the default flag; the default value is then "l", except if T is outside the range 2 to 35oC and/or S is outside the range 19 to 43. In these cases, the default value is "w14".}
   \item{kf}{"pf" for using Kf from Perez and Fraga (1987) and "dg" for using Kf from Dickson and Riley (1979 in Dickson and Goyet, 1994). "x" is the default flag; the default value is then "pf", except if T is outside the range 9 to 33oC and/or S is outside the range 10 to 40. In these cases, the default is "dg".}
 	\item{ks}{"d" for using Ks from Dickon (1990), "k" for using Ks from Khoo et al. (1977), default is "d"} 
-	\item{pHscale}{choice of pH scale: "T" for the total scale, "F" for the free scale and "SWS" for using the seawater scale, default is "T" (total scale)}
+	\item{pHscale}{choice of pH scale: "T" for the total scale, "F" for the free scale and "SWS" for using the seawater scale, default is "T" (total scale). On the free and seawater scales, the fluoride and sulfate terms of the noncarbonate alkalinity follow the alkalinity definition of the chosen scale (sulfate is a separate term on the free scale only, fluoride on the free and total scales), as in \code{\link{buffergen}}. The Revelle factor is therefore the same on every pH scale. Up to seacarb 3.4.1 these routines always used the total-scale terms, which made the Revelle factor too high or too low by up to about 13 ppm on the free scale and 3 ppm on the seawater scale, relative to the total scale. After the fix, the difference between scales is below 0.0001 ppm. Results on the total scale are unchanged.}
  	\item{b}{Concentration of total boron. "l10" for the Lee et al. (2010) formulation or "u74" for the Uppstrom (1974) formulation, default is "u74" }
   \item{warn}{"y" to show warnings when T or S go beyond the valid range for constants; "n" to supress warnings. The default is "y".}
     \item{eos}{"teos10" to specify T and S according to Thermodynamic Equation Of Seawater - 2010 (TEOS-10); "eos80" to specify T and S according to EOS-80.}
@@ -135,7 +135,7 @@ with \eqn{w_{bw} = 1 + K_w/h^2 + B_T K_B/(K_B+h)^2} (borate and water), \eqn{w_{
 
 \item For K1, K2, pK1, pK2, pK3, Kw, Kb, Khs and Ksi, the pressure correction was applied on the seawater scale. Hence, if needed, values were first transformed from the total scale to the seawater scale, the pressure correction applied as described by Millero (1995), and the value was transformed back to the required scale (T, F or SWS).
 
-\item For Kf, the pressure correction was applied on the free scale. The formulation of Dickson and Riley (1979 in Dickson and Goyet, 1994) provides Kf on the free scale but that of Perez and Fraga (1987) provides it on the total scale. Hence, in that case, Kf was first transformed from the total scale to the free scale. With both formulations, the pressure correction was applied as described by Millero (1995), and the value was transformed back to the required scale (T, F or SWS). 
+\item For Kf, the pressure correction was applied on the free scale. Both formulations, that of Dickson and Riley (1979 in Dickson and Goyet, 1994) and that of Perez and Fraga (1987), provide Kf on the free scale (SystemCO2 discussion forum, 2026). This holds even though Dickson et al. (2007, Chapter 5) state that all acid dissociation constants other than Ks are on the total scale. That statement does not apply to Kf, which is on the free scale. So no conversion is needed before the pressure correction, which is applied as described by Millero (1995), and the value is then transformed to the required scale (T, F or SWS). 
 
 \item For Ks, the pressure correction was applied on the free scale. The pressure correction was applied as described by Millero (1995), and the value was transformed back to the required scale (T, F or SWS). 
 
@@ -221,6 +221,8 @@ Schockman, K.M., Byrne, R.H., 2021. Spectrophotometric determination of the bica
 Sundquist E. T., Plummer L. N. and Wigley T. M. L., 1979 Carbon dioxide in the ocean surface: the homogeneous buffer factor. \emph{Science} \bold{204}, 1203-1205.
 
 Uppstrom L.R., 1974 The boron/chlorinity ratio of the deep-sea water from the Pacific Ocean. \emph{Deep-Sea Research I} \bold{21} 161-162.
+
+SystemCO2 discussion forum, 2026 What pH scale is the Perez and Fraga (1987) KF on? seacarb and PyCO2SYS disagree, and the coefficients make it puzzling. \url{https://systemco2.net/t/27} (last access: 6 November 2026).
 }
 
 \author{

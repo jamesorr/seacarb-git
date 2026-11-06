@@ -125,7 +125,7 @@ The arguments can be given as a unique number or as vectors. If the lengths of t
 
 \item For K1, K2, pK1, pK2, pK3, Kw, Kb, Khs, Ksi and K2si, the pressure correction was applied on the seawater scale. Hence, if needed, values were first transformed from the total scale to the seawater scale, the pressure correction applied as described by Millero (1995), and the value was transformed back to the required scale (T, F or SWS).
 
-\item For Kf, the pressure correction was applied on the free scale. The formulation of Dickson and Riley (1979 in Dickson and Goyet, 1994) provides Kf on the free scale but that of Perez and Fraga (1987) provides it on the total scale. Hence, in that case, Kf was first transformed from the total scale to the free scale. With both formulations, the pressure correction was applied as described by Millero (1995), and the value was transformed back to the required scale (T, F or SWS). 
+\item For Kf, the pressure correction was applied on the free scale. Both formulations, that of Dickson and Riley (1979 in Dickson and Goyet, 1994) and that of Perez and Fraga (1987), provide Kf on the free scale (SystemCO2 discussion forum, 2026). This holds even though Dickson et al. (2007, Chapter 5) state that all acid dissociation constants other than Ks are on the total scale. That statement does not apply to Kf, which is on the free scale. So no conversion is needed before the pressure correction, which is applied as described by Millero (1995), and the value is then transformed to the required scale (T, F or SWS). 
 
 \item For Ks, the pressure correction was applied on the free scale. The pressure correction was applied as described by Millero (1995), and the value was transformed back to the required scale (T, F or SWS). 
 
@@ -141,19 +141,23 @@ The arguments can be given as a unique number or as vectors. If the lengths of t
   \item{dtotX.dX}{Sensitivity of an acid-base species to a change in its total concentration (dimensionless). Species-specific.}
   \item{dALK.dpH}{Sensitivity of ALK to a change in pH (mol/kg-soln). Species-specific.}
   \item{dtotX.dpH}{Sensitivity of an acid-species to a change in pH (mol/kg-soln). Species-specific.}
-  \item{dH.dALK}{Sensitivity of proton concentration to a change in ALK (dimensionless). Values are the same for all species and all acid-base systems, except for the fluoride and sulfate acid-base systems, which slightly deviate due to pH scale conversion effects.}
+  \item{dH.dALK}{Sensitivity of proton concentration to a change in ALK (dimensionless). Values are the same for all species and all acid-base systems for which they are defined (see below for the fluoride and sulfate systems).}
   \item{dH.dtotX}{Sensitivity of an acid-species to a change in its total concentration (dimensionless). Values are the same for all species of a specific acid-base system.}
   \item{dX.dALK}{Sensitivity of an acid-species to a change in its total concentration (dimensionless). Species-specific.}
   \item{dX.dtotX}{Sensitivity of an acid-species to a change in its total concentration (dimensionless). Species-specific.}
-  \item{dpH.dALK}{Sensitivity of pH due to a change in ALK ((mol/kg-soln)-1). Values are the same for all species and all acid-base systems, except for the fluoride and sulfate acid-base systems, which slightly deviate due to pH scale conversion effects.}
+  \item{dpH.dALK}{Sensitivity of pH due to a change in ALK ((mol/kg-soln)-1). Values are the same for all species and all acid-base systems for which they are defined (see below for the fluoride and sulfate systems).}
   \item{dpH.dtotX}{Sensitivity of pH due to a change in the total concentration of an acid-base system ((mol/kg-soln)-1). Values are the same for all species of a specific acid-base system.}
   \item{beta.H}{proton concentration buffer factor (Eq.4 of Hagens and Middelburg (2016), dimensionless)}   
   \item{RF}{Revelle factor (dimensionless)}
   If the total concentration of an acid-base system is 0, the values of the buffer factors corresponding to all species of that acid-base system return NA.
+
+  The same is done where the derivative with respect to an acid-base system is not defined on the chosen pH scale. The sulfate system (SO4, HSO4, ST) is a separate member of the total alkalinity only on the free scale, because on the total and seawater scales HSO4 is part of the definition of [H+]. The fluoride system (F, HF, FLUO) is a separate member on the free and total scales but not on the seawater scale, where HF is also part of [H+]. For those systems and scales all twelve species-specific outputs are NA, because changing the total concentration of such a system would also change the definition of the pH scale. The Revelle factor (RF) and beta.H are not affected.
 }
 
 \references{
 Hagens M. and Middelburg J. J., 2016 Generalised expressions for the response of pH to changes in ocean chemistry. \emph{Geochimica et Cosmochimica Acta} \bold{187} 334-349.
+
+SystemCO2 discussion forum, 2026 What pH scale is the Perez and Fraga (1987) KF on? seacarb and PyCO2SYS disagree, and the coefficients make it puzzling. \url{https://systemco2.net/t/27} (last access: 6 November 2026).
 }
 
 \author{

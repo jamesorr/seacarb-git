@@ -32,7 +32,7 @@ It is, however, critical to consider that each formulation is only valid for spe
 
 Note that the arguments can be given as a unique number or as vectors. If the lengths of the vectors are different, the longer vector is retained and only the first value of the other vectors is used. It can therefore be critical to use vectors of the same length. 
 
-The pressure correction was applied on the free scale. The formulation of Dickson and Riley (1979 in Dickson and Goyet, 1994) provides Kf on the free scale but that of Perez and Fraga (1987) provides it on the total scale. Hence, in that case, Kf was first transformed from the total scale to the free scale. With both formulations, the pressure correction was applied as described by Millero (1995), and the value was transformed back to the required scale (T, F or SWS).
+The pressure correction is applied on the free scale. Both formulations, that of Dickson and Riley (1979 in Dickson and Goyet, 1994) and that of Perez and Fraga (1987), provide Kf on the free scale (SystemCO2 discussion forum, 2026). This holds even though Dickson et al. (2007, Chapter 5) state that all acid dissociation constants other than Ks are on the total scale. That statement does not apply to Kf, which is on the free scale. So no conversion is needed before the pressure correction, which is applied as described by Millero (1995), and the value is then transformed to the required scale (T, F or SWS).
 } 
 
 \value{
@@ -49,6 +49,8 @@ DOE 1994 \emph{Handbook of methods for the analysis of the various parameters of
 Millero F. J., 1995 Thermodynamics of the carbon dioxide system in the oceans. \emph{Geochimica Cosmochimica Acta} \bold{59}: 661-677.
 
 Perez F. F. and Fraga F., 1987 Association constant of fluoride and hydrogen ions in seawater. \emph{Marine Chemistry} \bold{21}, 161-168.
+
+SystemCO2 discussion forum, 2026 What pH scale is the Perez and Fraga (1987) KF on? seacarb and PyCO2SYS disagree, and the coefficients make it puzzling. \url{https://systemco2.net/t/27} (last access: 6 November 2026).
 }
 
 \author{

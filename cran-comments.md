@@ -1,3 +1,47 @@
+# v3.4.2
+## Submission summary
+
+seacarb 3.4.2 is a patch release. It corrects the Revelle factor
+routines buffergen(), buffsun(), buffzwg(), buffesm(), and buffer() on
+the free and seawater pH scales, and the ammonium and sulfide constants
+(Kn and Khs) that were converted to the chosen pH scale with a different
+Kf than all other constants when kf was set explicitly to "dg". Results
+on the total pH scale with the default settings are unchanged. In
+buffergen(), outputs that are not defined on a given pH scale now
+return NA. The Kf help pages (21 files) were corrected to state that
+both Kf formulations are on the free scale. Regression tests were added
+(test-buffergen.R, test-buff-scales.R, test-kn-khs-kf.R).
+
+## Test environments
+
+* local Ubuntu 24.04.5, R 4.3.3, with NOT_CRAN=true and --as-cran
+* GitHub Actions: ubuntu-latest (release, devel) and windows-latest
+  (release), all passing. The macos-latest job could not be run
+  because no runner became available.
+
+## R CMD check results
+
+0 errors | 0 warnings | 3 notes
+
+* CRAN incoming feasibility: maintainer note. The URL
+  https://systemco2.net/t/27 (used in the Kf and related help pages)
+  redirects to the full thread address and returns status 200. The short
+  form is kept because the full address contains the thread title.
+* checking for future file timestamps: unable to verify current time
+  (the local machine could not check the time).
+* checking HTML version of manual: math rendering skipped because
+  package V8 is unavailable locally.
+
+## Reverse dependencies
+
+seacarb has three reverse dependencies on CRAN (ecolMod, marelac,
+respirometry). We checked all three against this version (R 4.3.3,
+Ubuntu 24.04) and found no problems. None of them uses the functions
+changed in this release (the buffer routines, carbfull(), or explicit
+kf settings): marelac uses rho(), respirometry uses carb() with default
+arguments, Kn(), and rho(), and ecolMod only suggests seacarb.
+
+
 # v3.4.1
 ## Submission summary
 

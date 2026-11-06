@@ -47,7 +47,7 @@ buffergen <- function(flag, var1, var2, S=35, T=25, Patm=1, P=0, Pt=0, Sit=0, k1
   #---------------------------------------------------------------------
   
   # Define a function to calculate the buffer factors
-  bufferfunc <- function(Carbfull, species=species){
+  bufferfunc <- function(Carbfull, species=species, pHscale="T"){
   with(as.list(Carbfull),{
 
     # Calculation of acid-base fractions
@@ -71,6 +71,20 @@ buffergen <- function(flag, var1, var2, S=35, T=25, Patm=1, P=0, Pt=0, Sit=0, k1
     f2  <- F / FLUO
     so1 <- HSO4 / ST
     so2 <- SO4 / ST
+    
+    # Which fluoride and sulfate terms are separate members of the alkalinity sum
+    # depends on the pH scale of [H+] (and of the equilibrium constants):
+    #   free scale  (F): ALK = ... + [OH-] - [H+]F - [HSO4-] - [HF]
+    #                    so both HSO4 and HF are explicit terms.
+    #   total scale (T): [H+]T = [H+]F + [HSO4-], so the bisulfate is already inside
+    #                    [H+]T. ALK = ... + [OH-] - [H+]T - [HF]; only HF is explicit.
+    #                    Adding an explicit HSO4 term here would count sulfate twice.
+    #   SWS scale:       [H+]SWS = [H+]F + [HSO4-] + [HF], so neither is explicit.
+    # This follows the definitions used by SolveSAPHE (aphscale) and by carbfull(),
+    # which solves for the pH from exactly this alkalinity. buffergen() must
+    # differentiate the same alkalinity that carbfull() inverts.
+    explicit.HSO4 <- (pHscale == "F")
+    explicit.HF   <- (pHscale %in% c("T", "F"))
     
     # Ceation of output vectors
     dALK.dH <- dtotX.dH <- dALK.dX <- dtotX.dX <- dALK.dpH <- dtotX.dpH <- 
@@ -123,7 +137,10 @@ buffergen <- function(flag, var1, var2, S=35, T=25, Patm=1, P=0, Pt=0, Sit=0, k1
                 if(X.name == "CO3" || X.name == "PO4" || X.name == "SiO2OH2") {N <- 2} else
                      
                      if(X.name == "H3PO4" || X.name == "HF" || X.name == "HSO4") {
-                       n <- -1} else
+                       # N (capital) is the value returned by this function. The former
+                       # lowercase 'n <- -1' only worked because an assignment also
+                       # returns its value; it never set N itself.
+                       N <- -1} else
                          
                          NULL
     }
@@ -171,12 +188,24 @@ buffergen <- function(flag, var1, var2, S=35, T=25, Patm=1, P=0, Pt=0, Sit=0, k1
       if(FLUO!=0) {
         if(X.name == "F" || X.name == "HF" || X.name == "FLUO") {
           dALKdH.F <- (-1/H)*(-N*ALK.X + HF)} else {
-            dALKdH.F <- (-1/H)*(-HF*f2)}
+            dALKdH.F <- if(explicit.HF) (-1/H)*(HF*f2) else 0}
+            # d(-[HF])/dH at fixed total fluoride equals +[HF][F-]/(TotF [H+]) = (1/H)*HF*f2.
+            # In Table 2, column (b), of Hagens and Middelburg (2016) the fluoride row is
+            # printed as (-1/[H+])(-[HF][F-]/TotF), which has the opposite sign. The nitrate
+            # and nitrite rows have the same printed form and the same sign problem, but
+            # those systems are not included in buffergen(). Column (a) and the other rows
+            # of column (b) are correct. The former code here, (-1/H)*(-HF*f2), copied the
+            # printed fluoride sign. Corrected here, and used only where HF is an explicit
+            # alkalinity term (explicit.HF).
       } else dALKdH.F <- 0  
       if(ST!=0) {
         if(X.name == "SO4" || X.name == "HSO4" || X.name == "ST") {
           dALKdH.SO4 <- (-1/H)*(-N*ALK.X + HSO4)} else {
-            dALKdH.SO4 <- (-1/H)*(-HSO4*so2)}
+            dALKdH.SO4 <- if(explicit.HSO4) (-1/H)*(HSO4*so2) else 0}
+            # Same sign correction as for fluoride: d(-[HSO4-])/dH at fixed total
+            # sulfate is +[HSO4-][SO4--]/(TotSO4 [H+]). The former code had the sign
+            # reversed, and also included the term on every pH scale. It now applies
+            # only on the free scale (explicit.HSO4), where HSO4 is a separate term.
       } else dALKdH.SO4 <- 0  
       dALKdH.H <- (-1/H)*(OH+H)       # Internal enhancement of buffering
       return(dALKdH.CO2 + dALKdH.NH4 + dALKdH.H2PO4 + dALKdH.H2S + dALKdH.SiOH4 + dALKdH.BOH3 + 
@@ -218,8 +247,9 @@ buffergen <- function(flag, var1, var2, S=35, T=25, Patm=1, P=0, Pt=0, Sit=0, k1
       if(Sit!=0) {dALKdH.SiOH4 <- (-1/H)*(SiOOH3*(si1-si3) + 
                                          2*SiO2OH2*(2*si1+si2))} else {dALKdH.SiOH4 <- 0}
       if(BOR!=0) {dALKdH.BOH3 <-(-1/H)*(BOH4*b1)} else {dALKdH.BOH3 <- 0}
-      if(FLUO!=0) {dALKdH.F <- (-1/H)*(-HF*f2)} else {dALKdH.F <- 0}  
-      if(ST!=0) {dALKdH.SO4 <- (-1/H)*(-HSO4*so2)} else {dALKdH.SO4 <- 0}  
+      # Same corrections (sign, and explicit terms only) as in dALKdH.function above
+      if(FLUO!=0 && explicit.HF) {dALKdH.F <- (-1/H)*(HF*f2)} else {dALKdH.F <- 0}  
+      if(ST!=0 && explicit.HSO4) {dALKdH.SO4 <- (-1/H)*(HSO4*so2)} else {dALKdH.SO4 <- 0}  
       dALKdH.H <- (-1/H)*(OH+H)       # Internal enhancement of buffering
       return(dALKdH.CO2 + dALKdH.NH4 + dALKdH.H2PO4 + dALKdH.H2S + dALKdH.SiOH4 + dALKdH.BOH3 + 
                dALKdH.F + dALKdH.SO4 + dALKdH.H)
@@ -263,7 +293,25 @@ buffergen <- function(flag, var1, var2, S=35, T=25, Patm=1, P=0, Pt=0, Sit=0, k1
       ALK.X          <- ALK.species(X.name)
       totX           <- totX.function(X.name)
       
-      if(totX!=0) {
+      # Is the derivative with respect to this species or its total defined on the
+      # chosen pH scale? The sulfate system (SO4, HSO4, ST) is a separate member of the
+      # alkalinity sum only on the free scale, because on the total and SWS scales the
+      # bisulfate is part of the definition of [H+]. In the same way, the fluoride
+      # system (F, HF, FLUO) is a separate member on the free and total scales but not
+      # on the SWS scale, where HF is also part of [H+]. Where the system is not a
+      # separate member, "the derivative with respect to its total" has no meaning:
+      # changing total sulfate (or fluoride) would also change the definition of the pH
+      # scale itself. Before this masking, ALK.X was set to -[HSO4-] or -[HF] on every
+      # scale, so these rows returned numbers that looked plausible but were wrong
+      # (relative errors from 1e-6 up to order one, depending on the quantity).
+      # They are now left as NA, as for a system with zero total concentration.
+      # The Revelle factor (RF) and beta.H do not depend on these rows.
+      in.sulfate.system  <- X.name %in% c("SO4", "HSO4", "ST")
+      in.fluoride.system <- X.name %in% c("F", "HF", "FLUO")
+      is.defined <- !((in.sulfate.system  && !explicit.HSO4) ||
+                      (in.fluoride.system && !explicit.HF))
+      
+      if(totX!=0 && is.defined) {
       # Calculation of factors in Table 3a
       dALK.dH[i]     <- dALKdH.function(X.name)
       dtotX.dH[i]    <- (N*totX - ALK.X) / H
@@ -319,7 +367,7 @@ buffergen <- function(flag, var1, var2, S=35, T=25, Patm=1, P=0, Pt=0, Sit=0, k1
   for(j in 1:dim(Carbfull)[1]){
   
     # Run function
-    result <- bufferfunc(Carbfull[j,], species)
+    result <- bufferfunc(Carbfull[j,], species, pHscale[j])
   
     # Transfer the result to an output
     for(k in 1:length(result)){

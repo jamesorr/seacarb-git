@@ -147,8 +147,8 @@ function(flag, var1, var2, S=35, T=25, Patm=1, P=0, Pt=0, Sit=0, NH4t=0, HSt=0, 
     Kspa <- Kspa_fct(S=SP, T=InsT, P=P, warn=warn)
     Kspc <- Kspc_fct(S=SP, T=InsT, P=P, warn=warn)
     if (fullresult) {
-        Kn <- Kn(S=S, T=T, P=P, pHscale=pHscale)
-        Khs <- Khs(S=S, T=T, P=P, pHscale=pHscale)
+        Kn <- Kn(S=S, T=T, P=P, pHscale=pHscale, kSWS2chosen)
+        Khs <- Khs(S=S, T=T, P=P, pHscale=pHscale, kSWS2chosen, ktotal2SWS_P0)
         K2si <- K2si(S=S, T=T, P=P, pHscale=pHscale, kSWS2chosen, ktotal2SWS_P0)
     } else {
         Kn <- rep(0,n)
