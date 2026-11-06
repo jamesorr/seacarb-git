@@ -6,3 +6,4 @@
 ^\.github$
 ^CLAUDE\.md$
 ^cran-comments\.md$
+^tests/testthat/CLAUDE\.md$
